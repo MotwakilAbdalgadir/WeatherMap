@@ -1,0 +1,14 @@
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Editor directories
+.vscode/
+.idea/
+
+# Local configuration overrides (avoid committing real API keys)
+config.local.js
+
+# Dependencies (if any local server tools are installed)
+node_modules/
+npm-debug.log*
