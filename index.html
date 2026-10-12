@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="WeatherMap - An interactive Single Page Application for real-time weather and geographic mapping.">
+  <title>WeatherMap — Interactive Weather Dashboard</title>
+
+  <!-- Google Fonts: Roboto -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+  <!-- Leaflet Map CSS (v1.9.4) -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+        crossorigin="">
+
+  <!-- Custom Stylesheet (No inline CSS allowed) -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Semantic Header -->
+  <header class="app-header">
+    <div class="header-container">
+      <h1 class="app-title">WeatherMap</h1>
+      <p class="app-subtitle">Search any location worldwide to view real-time meteorological conditions</p>
+    </div>
+  </header>
+
+  <!-- Main Content Area -->
+  <main class="main-content">
+    <div class="app-layout">
+      
+      <!-- Search & Controls Section -->
+      <section class="controls-panel" aria-labelledby="search-heading">
+        <h2 id="search-heading" class="visually-hidden">Location Search and Controls</h2>
+
+        <!-- Search Form -->
+        <form id="search-form" class="search-form" novalidate>
+          <div class="input-group">
+            <label for="location-input" class="input-label">Search Location</label>
+            <div class="input-wrapper">
+              <input 
+                type="text" 
+                id="location-input" 
+                name="location" 
+                class="location-input" 
+                placeholder="e.g. Khartoum, London, Tokyo..." 
+                autocomplete="off" 
+                required
+                aria-describedby="status-region"
+              >
+              <button type="submit" id="search-btn" class="search-btn">
+                <span class="btn-text">Get Weather</span>
+              </button>
+            </div>
+          </div>
+        </form>
+
+        <!-- Status Region: Loading & Accessible Alerts -->
+        <div id="status-region" class="status-region">
+          <!-- Loading Spinner -->
+          <div id="loading-indicator" class="loading-indicator hidden" role="status" aria-live="polite">
+            <div class="spinner" aria-hidden="true"></div>
+            <span class="loading-text">Fetching location and weather data...</span>
+          </div>
+
+          <!-- Error Alert Banner -->
+          <div id="error-message" class="error-banner hidden" role="alert" aria-live="assertive">
+            <div class="error-icon" aria-hidden="true">⚠️</div>
+            <div id="error-text" class="error-text"></div>
+          </div>
+        </div>
+
+        <!-- Bonus: Favorites / Saved Locations Section -->
+        <section class="favorites-section" aria-labelledby="favorites-heading">
+          <div class="favorites-header">
+            <h3 id="favorites-heading" class="favorites-title">Saved Locations</h3>
+            <span id="favorites-count" class="favorites-count">(0)</span>
+          </div>
+          <div id="favorites-empty" class="favorites-empty">
+            No saved locations yet. Search for a city to pin it here.
+          </div>
+          <ul id="favorites-list" class="favorites-list hidden" aria-label="Favorite locations list"></ul>
+        </section>
+      </section>
+
+      <!-- Map Display Section -->
+      <section class="map-panel" aria-labelledby="map-heading">
+        <h2 id="map-heading" class="visually-hidden">Interactive Meteorological Map</h2>
+        <!-- Map Container: Explicitly sized to 70vh -->
+        <div id="map" class="map-container" role="region" aria-label="Interactive Weather Map of the World"></div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Semantic Footer -->
+  <footer class="app-footer">
+    <p>WeatherMap SPA &bull; Data provided by <a href="https://openweathermap.org/" target="_blank" rel="noopener noreferrer">OpenWeatherMap</a> &amp; <a href="https://www.openstreetmap.org/" target="_blank" rel="noopener noreferrer">OpenStreetMap</a></p>
+  </footer>
+
+  <!-- Leaflet Map JS Library (Explicitly permitted) -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+          integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+          crossorigin=""></script>
+
+  <!-- ES6+ Native Module Entry Point -->
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
