@@ -200,6 +200,12 @@ Fetch https://api.openweathermap.org/data/2.5/weather?lat=...&lon=...&units=metr
    - Prevents duplicate favorites using normalized coordinate IDs (`lat.toFixed(3)_lon.toFixed(3)`).
    - One-click loading of saved cities directly on the map.
    - Removable favorites with instant DOM updates.
+3. **Bilingual Localization (Arabic & English Language Toggle):**
+   - Instant language switching with a one-click header toggle (`🌐 العربية` / `🌐 English`).
+   - Dynamic directionality: sets `dir="rtl"` with customized typography (Cairo font) for Arabic, and `dir="ltr"` for English.
+   - Dynamic API localization: requests localized weather condition descriptions directly from OpenWeatherMap (`&lang=ar` / `&lang=en`).
+   - Translates all UI controls, tooltips, loading spinners, favorites, popups, and share text.
+   - Persists user language preference in `localStorage`.
 
 ---
 
