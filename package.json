@@ -1,0 +1,13 @@
+{
+  "name": "weathermap",
+  "version": "1.0.0",
+  "description": "WeatherMap SPA - Interactive Weather Dashboard",
+  "main": "js/app.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node tests/verify.test.js && node tests/logic.test.js"
+  },
+  "keywords": ["weather", "leaflet", "spa", "vanilla-js"],
+  "author": "",
+  "license": "MIT"
+}
