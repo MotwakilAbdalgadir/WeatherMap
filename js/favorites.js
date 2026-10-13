@@ -4,6 +4,8 @@
  * graceful JSON error recovery, and safe DOM rendering.
  */
 
+import { t } from './i18n.js';
+
 const STORAGE_KEY = 'weathermap_favorites';
 
 /**
@@ -164,7 +166,7 @@ export function renderFavoritesUI(onSelect, onRemove) {
     selectBtn.type = 'button';
     selectBtn.className = 'favorite-select-btn';
     selectBtn.textContent = fav.name;
-    selectBtn.title = `Load weather for ${fav.name}`;
+    selectBtn.title = `${t('favoritesTitleAttr')} ${fav.name}`;
     selectBtn.addEventListener('click', () => {
       if (typeof onSelect === 'function') {
         onSelect(fav);
@@ -176,8 +178,8 @@ export function renderFavoritesUI(onSelect, onRemove) {
     removeBtn.type = 'button';
     removeBtn.className = 'favorite-remove-btn';
     removeBtn.textContent = '✕';
-    removeBtn.title = `Remove ${fav.name} from favorites`;
-    removeBtn.setAttribute('aria-label', `Remove ${fav.name} from favorites`);
+    removeBtn.title = `${t('favoritesRemoveAttr')} (${fav.name})`;
+    removeBtn.setAttribute('aria-label', `${t('favoritesRemoveAttr')} (${fav.name})`);
     removeBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       removeFavorite(fav.id);

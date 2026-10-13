@@ -1,7 +1,7 @@
 /**
  * app.js - Main Application Orchestrator
  * Coordinates search form events, geocoding, weather retrieval,
- * map updates, weather popup lifecycle, favorites, and sharing.
+ * map updates, weather popup lifecycle, favorites, sharing, and i18n language toggle.
  */
 
 import { initMap, flyToLocation, setWeatherMarker } from './map.js';
@@ -9,14 +9,20 @@ import { getCoordinates } from './geocoding.js';
 import { getWeather } from './weather.js';
 import { showLoading, hideLoading, showError, clearError, buildWeatherPopupElement } from './ui.js';
 import { renderFavoritesUI, toggleFavorite, isFavorite } from './favorites.js';
+import { getCurrentLanguage, setLanguage, toggleLanguage, t } from './i18n.js';
 
 // DOM Elements
 const searchForm = document.getElementById('search-form');
 const locationInput = document.getElementById('location-input');
+const langToggleBtn = document.getElementById('lang-toggle-btn');
 
 // Request state tracking to prevent race conditions and stale responses
 let activeAbortController = null;
 let isSubmitting = false;
+
+// Cached last search results for smooth re-rendering on language switch
+let lastCoords = null;
+let lastWeather = null;
 
 /**
  * Executes the complete weather lookup and map presentation pipeline.
@@ -48,8 +54,12 @@ export async function performLocationSearch(query, cachedCoords = null) {
       coords = await getCoordinates(query, currentSignal);
     }
 
+    // Cache coords for language toggle re-fetching
+    lastCoords = coords;
+
     // Stage 2: Fetch Current Weather
     const weatherData = await getWeather(coords.lat, coords.lon, coords.name, currentSignal);
+    lastWeather = weatherData;
 
     // Stage 3: Smooth Map Movement
     flyToLocation(coords.lat, coords.lon, 10);
@@ -89,7 +99,7 @@ export async function performLocationSearch(query, cachedCoords = null) {
  * @param {Object} weather - Structured weather data.
  */
 export async function handleShareWeather(weather) {
-  const shareText = `Weather in ${weather.name}: ${weather.temp}°C, ${weather.description}. Humidity: ${weather.humidity}%, Wind: ${weather.windSpeed} m/s, Clouds: ${weather.cloudiness}%.`;
+  const shareText = `${t('shareSummaryPrefix')} ${weather.name}: ${weather.temp}°C, ${weather.description}. ${t('humidity')}: ${weather.humidity}%, ${t('windSpeed')}: ${weather.windSpeed} ${t('unitsWind')}, ${t('cloudiness')}: ${weather.cloudiness}%.`;
   const shareData = {
     title: `WeatherMap — ${weather.name}`,
     text: shareText,
@@ -114,7 +124,7 @@ export async function handleShareWeather(weather) {
   if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
     try {
       await navigator.clipboard.writeText(shareText);
-      alert('Weather summary copied to clipboard:\n\n' + shareText);
+      alert(t('shareClipboardAlert') + shareText);
       return;
     } catch (clipErr) {
       console.warn('Clipboard write failed:', clipErr);
@@ -122,7 +132,7 @@ export async function handleShareWeather(weather) {
   }
 
   // 3. Graceful degradation alert
-  alert('Weather Summary:\n\n' + shareText);
+  alert(t('shareSummaryPrefix') + ':\n\n' + shareText);
 }
 
 /**
@@ -154,21 +164,55 @@ function handleSelectFavorite(favorite) {
 }
 
 /**
+ * Refreshes active marker popup on language switch.
+ */
+async function refreshCurrentWeatherOnLangChange() {
+  if (!lastCoords) return;
+  try {
+    const weatherData = await getWeather(lastCoords.lat, lastCoords.lon, lastCoords.name);
+    lastWeather = weatherData;
+    const favStatus = isFavorite(lastCoords.lat, lastCoords.lon);
+    const popupElement = buildWeatherPopupElement(
+      weatherData,
+      handleShareWeather,
+      handleToggleFavorite,
+      favStatus
+    );
+    setWeatherMarker(lastCoords.lat, lastCoords.lon, popupElement);
+  } catch (err) {
+    console.warn('Could not refresh weather on language change:', err);
+  }
+}
+
+/**
  * Initializes the application on DOM ready.
  */
 function initApplication() {
+  // 1. Initialize active language from localStorage (English or Arabic)
+  const currentLang = getCurrentLanguage();
+  setLanguage(currentLang);
+
   try {
-    // 1. Initialize interactive Leaflet map (centered on Khartoum, Sudan)
+    // 2. Initialize interactive Leaflet map (centered on Khartoum, Sudan)
     initMap('map');
   } catch (mapInitError) {
     console.error('Failed to initialize Leaflet map:', mapInitError);
     showError('Unable to initialize the interactive map. Please reload the page.');
   }
 
-  // 2. Render initial saved favorites from localStorage
+  // 3. Render initial saved favorites from localStorage
   renderFavoritesUI(handleSelectFavorite, () => {});
 
-  // 3. Wire up search form submission programmatically
+  // 4. Wire up language toggle button
+  if (langToggleBtn) {
+    langToggleBtn.addEventListener('click', () => {
+      toggleLanguage();
+      renderFavoritesUI(handleSelectFavorite, () => {});
+      refreshCurrentWeatherOnLangChange();
+    });
+  }
+
+  // 5. Wire up search form submission programmatically
   if (searchForm) {
     searchForm.addEventListener('submit', (e) => {
       e.preventDefault();
@@ -176,7 +220,7 @@ function initApplication() {
       const inputVal = locationInput ? locationInput.value.trim() : '';
 
       if (!inputVal) {
-        showError('Please enter a location name before searching.');
+        showError(t('emptyInputError'));
         if (locationInput) locationInput.focus();
         return;
       }

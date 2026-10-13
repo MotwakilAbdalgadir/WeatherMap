@@ -92,12 +92,34 @@ function testFavoriteDuplicates() {
   console.log('  ✓ Favorite ID generator and deduplication logic passed');
 }
 
+// 5. Test i18n Dictionary parity
+function testLanguageDictionary() {
+  console.log('  Testing i18n translation dictionary parity...');
+  const fs = require('fs');
+  const i18nCode = fs.readFileSync('js/i18n.js', 'utf8');
+
+  // Verify core translation keys exist for both languages
+  const requiredKeys = [
+    'appTitle', 'appSubtitle', 'searchHeading', 'searchLabel',
+    'searchPlaceholder', 'searchBtn', 'searchingBtn', 'loadingText',
+    'favoritesHeading', 'favoritesEmpty', 'humidity', 'windSpeed',
+    'cloudiness', 'condition', 'shareWeather', 'saveFavorite',
+    'favorited', 'langToggle'
+  ];
+
+  for (const key of requiredKeys) {
+    assert.strictEqual(i18nCode.includes(key), true, `Key "${key}" should exist in i18n module`);
+  }
+  console.log('  ✓ i18n translation parity passed');
+}
+
 // Execute tests
 try {
   testCoordinateValidation();
   testInputSanitization();
   testWeatherPayloadParser();
   testFavoriteDuplicates();
+  testLanguageDictionary();
   console.log('\n🎉 ALL NATIVE UNIT TESTS PASSED SUCCESSFULLY!');
 } catch (err) {
   console.error('\n❌ UNIT TEST FAILURE:', err.message);

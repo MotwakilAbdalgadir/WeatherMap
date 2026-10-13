@@ -3,6 +3,8 @@
  * Manages loading indicators, error banners, and builds secure DOM elements.
  */
 
+import { t } from './i18n.js';
+
 // Cache DOM elements
 const searchBtn = document.getElementById('search-btn');
 const loadingIndicator = document.getElementById('loading-indicator');
@@ -19,7 +21,7 @@ export function showLoading() {
   if (searchBtn) {
     searchBtn.disabled = true;
     const btnText = searchBtn.querySelector('.btn-text');
-    if (btnText) btnText.textContent = 'Searching...';
+    if (btnText) btnText.textContent = t('searchingBtn');
   }
 }
 
@@ -33,7 +35,7 @@ export function hideLoading() {
   if (searchBtn) {
     searchBtn.disabled = false;
     const btnText = searchBtn.querySelector('.btn-text');
-    if (btnText) btnText.textContent = 'Get Weather';
+    if (btnText) btnText.textContent = t('searchBtn');
   }
 }
 
@@ -112,10 +114,10 @@ export function buildWeatherPopupElement(weather, onShareClick, onFavoriteClick,
   detailsGrid.className = 'popup-details-grid';
 
   const details = [
-    { label: 'Humidity', value: `${weather.humidity}%` },
-    { label: 'Wind Speed', value: `${weather.windSpeed} m/s` },
-    { label: 'Cloudiness', value: `${weather.cloudiness}%` },
-    { label: 'Condition', value: weather.condition },
+    { label: t('humidity'), value: `${weather.humidity}%` },
+    { label: t('windSpeed'), value: `${weather.windSpeed} ${t('unitsWind')}` },
+    { label: t('cloudiness'), value: `${weather.cloudiness}%` },
+    { label: t('condition'), value: weather.condition },
   ];
 
   details.forEach(({ label, value }) => {
@@ -144,7 +146,7 @@ export function buildWeatherPopupElement(weather, onShareClick, onFavoriteClick,
   const shareBtn = document.createElement('button');
   shareBtn.type = 'button';
   shareBtn.className = 'popup-btn popup-btn-share';
-  shareBtn.textContent = '🔗 Share Weather';
+  shareBtn.textContent = t('shareWeather');
   if (typeof onShareClick === 'function') {
     shareBtn.addEventListener('click', () => onShareClick(weather));
   }
@@ -153,12 +155,12 @@ export function buildWeatherPopupElement(weather, onShareClick, onFavoriteClick,
   const favBtn = document.createElement('button');
   favBtn.type = 'button';
   favBtn.className = `popup-btn popup-btn-fav ${isFavorite ? 'active' : ''}`;
-  favBtn.textContent = isFavorite ? '★ Favorited' : '☆ Save Favorite';
+  favBtn.textContent = isFavorite ? t('favorited') : t('saveFavorite');
   if (typeof onFavoriteClick === 'function') {
     favBtn.addEventListener('click', () => {
       const newStatus = onFavoriteClick(weather);
       favBtn.classList.toggle('active', newStatus);
-      favBtn.textContent = newStatus ? '★ Favorited' : '☆ Save Favorite';
+      favBtn.textContent = newStatus ? t('favorited') : t('saveFavorite');
     });
   }
 

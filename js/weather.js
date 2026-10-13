@@ -3,6 +3,8 @@
  * Fetches current meteorological data using coordinates from the OpenWeatherMap Current Weather API.
  */
 
+import { getCurrentLanguage } from './i18n.js';
+
 // ============================================================================
 // CONFIGURATION NOTE:
 // Replace this placeholder with your free OpenWeatherMap API key.
@@ -54,6 +56,7 @@ export async function getWeather(lat, lon, customName, signal) {
     lon: lon.toString(),
     appid: apiKey,
     units: 'metric', // Metric units for Celsius and meters/sec
+    lang: getCurrentLanguage(), // Dynamic 'en' or 'ar' support
   });
 
   const requestUrl = `${WEATHER_BASE_URL}?${queryParams.toString()}`;

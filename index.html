@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="WeatherMap - An interactive Single Page Application for real-time weather and geographic mapping.">
   <title>WeatherMap — Interactive Weather Dashboard</title>
 
-  <!-- Google Fonts: Roboto -->
+  <!-- Google Fonts: Roboto & Cairo (for Arabic RTL) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 
   <!-- Leaflet Map CSS (v1.9.4) -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
@@ -23,8 +23,15 @@
   <!-- Semantic Header -->
   <header class="app-header">
     <div class="header-container">
-      <h1 class="app-title">WeatherMap</h1>
-      <p class="app-subtitle">Search any location worldwide to view real-time meteorological conditions</p>
+      <div class="header-brand">
+        <h1 class="app-title" data-i18n="appTitle">WeatherMap</h1>
+        <p class="app-subtitle" data-i18n="appSubtitle">Search any location worldwide to view real-time meteorological conditions</p>
+      </div>
+      <div class="header-actions">
+        <button type="button" id="lang-toggle-btn" class="lang-toggle-btn" aria-label="Toggle language">
+          🌐 العربية
+        </button>
+      </div>
     </div>
   </header>
 
@@ -34,12 +41,12 @@
       
       <!-- Search & Controls Section -->
       <section class="controls-panel" aria-labelledby="search-heading">
-        <h2 id="search-heading" class="visually-hidden">Location Search and Controls</h2>
+        <h2 id="search-heading" class="visually-hidden" data-i18n="searchHeading">Location Search and Controls</h2>
 
         <!-- Search Form -->
         <form id="search-form" class="search-form" novalidate>
           <div class="input-group">
-            <label for="location-input" class="input-label">Search Location</label>
+            <label for="location-input" class="input-label" data-i18n="searchLabel">Search Location</label>
             <div class="input-wrapper">
               <input 
                 type="text" 
@@ -47,12 +54,13 @@
                 name="location" 
                 class="location-input" 
                 placeholder="e.g. Khartoum, London, Tokyo..." 
+                data-i18n-placeholder="searchPlaceholder"
                 autocomplete="off" 
                 required
                 aria-describedby="status-region"
               >
               <button type="submit" id="search-btn" class="search-btn">
-                <span class="btn-text">Get Weather</span>
+                <span class="btn-text" data-i18n="searchBtn">Get Weather</span>
               </button>
             </div>
           </div>
@@ -63,7 +71,7 @@
           <!-- Loading Spinner -->
           <div id="loading-indicator" class="loading-indicator hidden" role="status" aria-live="polite">
             <div class="spinner" aria-hidden="true"></div>
-            <span class="loading-text">Fetching location and weather data...</span>
+            <span class="loading-text" data-i18n="loadingText">Fetching location and weather data...</span>
           </div>
 
           <!-- Error Alert Banner -->
@@ -76,10 +84,10 @@
         <!-- Bonus: Favorites / Saved Locations Section -->
         <section class="favorites-section" aria-labelledby="favorites-heading">
           <div class="favorites-header">
-            <h3 id="favorites-heading" class="favorites-title">Saved Locations</h3>
+            <h3 id="favorites-heading" class="favorites-title" data-i18n="favoritesHeading">Saved Locations</h3>
             <span id="favorites-count" class="favorites-count">(0)</span>
           </div>
-          <div id="favorites-empty" class="favorites-empty">
+          <div id="favorites-empty" class="favorites-empty" data-i18n="favoritesEmpty">
             No saved locations yet. Search for a city to pin it here.
           </div>
           <ul id="favorites-list" class="favorites-list hidden" aria-label="Favorite locations list"></ul>
@@ -98,7 +106,7 @@
 
   <!-- Semantic Footer -->
   <footer class="app-footer">
-    <p>WeatherMap SPA &bull; Data provided by <a href="https://openweathermap.org/" target="_blank" rel="noopener noreferrer">OpenWeatherMap</a> &amp; <a href="https://www.openstreetmap.org/" target="_blank" rel="noopener noreferrer">OpenStreetMap</a></p>
+    <p data-i18n="footerText">WeatherMap SPA &bull; Data provided by <a href="https://openweathermap.org/" target="_blank" rel="noopener noreferrer">OpenWeatherMap</a> &amp; <a href="https://www.openstreetmap.org/" target="_blank" rel="noopener noreferrer">OpenStreetMap</a></p>
   </footer>
 
   <!-- Leaflet Map JS Library (Explicitly permitted) -->
