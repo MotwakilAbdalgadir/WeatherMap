@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="WeatherMap - An interactive Single Page Application for real-time weather and geographic mapping.">
-  <title>WeatherMap — Interactive Weather Dashboard</title>
+  <meta name="description" content="WeatherMap - تطبيق تفاعلي لعرض حالة الطقس والخرائط الجغرافية اللحظية.">
+  <title>خريطة الطقس — WeatherMap</title>
 
-  <!-- Google Fonts: Roboto & Cairo (for Arabic RTL) -->
+  <!-- Google Fonts: Cairo (Arabic RTL) & Roboto -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -24,12 +24,12 @@
   <header class="app-header">
     <div class="header-container">
       <div class="header-brand">
-        <h1 class="app-title" data-i18n="appTitle">WeatherMap</h1>
-        <p class="app-subtitle" data-i18n="appSubtitle">Search any location worldwide to view real-time meteorological conditions</p>
+        <h1 class="app-title" data-i18n="appTitle">خريطة الطقس (WeatherMap)</h1>
+        <p class="app-subtitle" data-i18n="appSubtitle">ابحث عن أي موقع حول العالم لعرض الأحوال الجوية اللحظية على الخريطة</p>
       </div>
       <div class="header-actions">
         <button type="button" id="lang-toggle-btn" class="lang-toggle-btn" aria-label="Toggle language">
-          🌐 العربية
+          🌐 English
         </button>
       </div>
     </div>
@@ -41,26 +41,26 @@
       
       <!-- Search & Controls Section -->
       <section class="controls-panel" aria-labelledby="search-heading">
-        <h2 id="search-heading" class="visually-hidden" data-i18n="searchHeading">Location Search and Controls</h2>
+        <h2 id="search-heading" class="visually-hidden" data-i18n="searchHeading">البحث عن الموقع والتحكم</h2>
 
         <!-- Search Form -->
         <form id="search-form" class="search-form" novalidate>
           <div class="input-group">
-            <label for="location-input" class="input-label" data-i18n="searchLabel">Search Location</label>
+            <label for="location-input" class="input-label" data-i18n="searchLabel">البحث عن موقع أو مدينة</label>
             <div class="input-wrapper">
               <input 
                 type="text" 
                 id="location-input" 
                 name="location" 
                 class="location-input" 
-                placeholder="e.g. Khartoum, London, Tokyo..." 
+                placeholder="مثال: الخرطوم، مكة، لندن، طوكيو..." 
                 data-i18n-placeholder="searchPlaceholder"
                 autocomplete="off" 
                 required
                 aria-describedby="status-region"
               >
               <button type="submit" id="search-btn" class="search-btn">
-                <span class="btn-text" data-i18n="searchBtn">Get Weather</span>
+                <span class="btn-text" data-i18n="searchBtn">عرض الطقس</span>
               </button>
             </div>
           </div>
@@ -71,7 +71,7 @@
           <!-- Loading Spinner -->
           <div id="loading-indicator" class="loading-indicator hidden" role="status" aria-live="polite">
             <div class="spinner" aria-hidden="true"></div>
-            <span class="loading-text" data-i18n="loadingText">Fetching location and weather data...</span>
+            <span class="loading-text" data-i18n="loadingText">جاري جلب بيانات الموقع وحالة الطقس...</span>
           </div>
 
           <!-- Error Alert Banner -->
@@ -84,19 +84,19 @@
         <!-- Bonus: Favorites / Saved Locations Section -->
         <section class="favorites-section" aria-labelledby="favorites-heading">
           <div class="favorites-header">
-            <h3 id="favorites-heading" class="favorites-title" data-i18n="favoritesHeading">Saved Locations</h3>
+            <h3 id="favorites-heading" class="favorites-title" data-i18n="favoritesHeading">الأماكن المحفوظة</h3>
             <span id="favorites-count" class="favorites-count">(0)</span>
           </div>
           <div id="favorites-empty" class="favorites-empty" data-i18n="favoritesEmpty">
-            No saved locations yet. Search for a city to pin it here.
+            لا توجد أماكن محفوظة بعد. ابحث عن أي مدينة لحفظها هنا.
           </div>
-          <ul id="favorites-list" class="favorites-list hidden" aria-label="Favorite locations list"></ul>
+          <ul id="favorites-list" class="favorites-list hidden" aria-label="قائمة الأماكن المفضلة"></ul>
         </section>
       </section>
 
       <!-- Map Display Section -->
       <section class="map-panel" aria-labelledby="map-heading">
-        <h2 id="map-heading" class="visually-hidden">Interactive Meteorological Map</h2>
+        <h2 id="map-heading" class="visually-hidden">خريطة الطقس التفاعلية</h2>
         <!-- Map Container: Explicitly sized to 70vh -->
         <div id="map" class="map-container" role="region" aria-label="Interactive Weather Map of the World"></div>
       </section>
@@ -106,7 +106,7 @@
 
   <!-- Semantic Footer -->
   <footer class="app-footer">
-    <p data-i18n="footerText">WeatherMap SPA &bull; Data provided by <a href="https://openweathermap.org/" target="_blank" rel="noopener noreferrer">OpenWeatherMap</a> &amp; <a href="https://www.openstreetmap.org/" target="_blank" rel="noopener noreferrer">OpenStreetMap</a></p>
+    <p data-i18n="footerText">تطبيق خريطة الطقس &bull; البيانات مقدمة من <a href="https://openweathermap.org/" target="_blank" rel="noopener noreferrer">OpenWeatherMap</a> &amp; <a href="https://www.openstreetmap.org/" target="_blank" rel="noopener noreferrer">OpenStreetMap</a></p>
   </footer>
 
   <!-- Leaflet Map JS Library (Explicitly permitted) -->

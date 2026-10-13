@@ -74,7 +74,7 @@ export function getCurrentLanguage() {
   if (stored === 'ar' || stored === 'en') {
     return stored;
   }
-  return 'en';
+  return 'ar'; // Default language: Arabic
 }
 
 /**
@@ -87,8 +87,8 @@ export function t(key) {
   if (translations[lang] && typeof translations[lang][key] !== 'undefined') {
     return translations[lang][key];
   }
-  // Fallback to English
-  return translations.en[key] || key;
+  // Fallback to Arabic, then English
+  return (translations.ar && translations.ar[key]) || translations.en[key] || key;
 }
 
 /**
@@ -100,7 +100,7 @@ export function t(key) {
  */
 export function setLanguage(lang) {
   if (lang !== 'en' && lang !== 'ar') {
-    lang = 'en';
+    lang = 'ar';
   }
 
   localStorage.setItem(STORAGE_LANG_KEY, lang);
