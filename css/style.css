@@ -304,11 +304,6 @@ body {
   animation: fadeIn 0.25s ease-in;
 }
 
-.error-icon {
-  font-size: 1.15rem;
-  flex-shrink: 0;
-}
-
 @keyframes fadeIn {
   from {
     opacity: 0;
