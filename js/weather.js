@@ -11,7 +11,7 @@
 // to users via Network DevTools or page source inspection. In production,
 // sensitive keys are protected via a backend proxy/gateway.
 // ============================================================================
-export const OPENWEATHER_API_KEY = 'YOUR_OPENWEATHERMAP_API_KEY_HERE';
+export const OPENWEATHER_API_KEY = '7c3734382baaf153d9e200d500c74220';
 
 const WEATHER_BASE_URL = 'https://api.openweathermap.org/data/2.5/weather';
 
