@@ -1,9 +1,3 @@
-/**
- * tests/test_live_api.js
- * Utility script to verify the live OpenWeatherMap API key activation status.
- * Run with: node tests/test_live_api.js
- */
-
 const key = '7c3734382baaf153d9e200d500c74220';
 const url = `https://api.openweathermap.org/data/2.5/weather?lat=15.5007&lon=32.5599&appid=${key}&units=metric`;
 

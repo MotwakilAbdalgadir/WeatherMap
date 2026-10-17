@@ -1,13 +1,7 @@
-/**
- * tests/logic.test.js - Unit tests for core domain logic
- * Pure native JavaScript tests (No external test frameworks used)
- */
-
 const assert = require('assert');
 
 console.log('🧪 Starting Native Unit Tests for WeatherMap Logic...');
 
-// 1. Test Coordinate validation rules
 function testCoordinateValidation() {
   console.log('  Testing coordinate number range validation...');
   const isValidCoord = (lat, lon) =>
@@ -30,7 +24,6 @@ function testCoordinateValidation() {
   console.log('  ✓ Coordinate validation passed');
 }
 
-// 2. Test Input Trimming & Empty Validation
 function testInputSanitization() {
   console.log('  Testing search query trimming and validation...');
   const validateQuery = (query) => {
@@ -47,7 +40,6 @@ function testInputSanitization() {
   console.log('  ✓ Input sanitization passed');
 }
 
-// 3. Test Weather payload parsing & icon formatting
 function testWeatherPayloadParser() {
   console.log('  Testing weather API data mapping...');
   const sampleApiResponse = {
@@ -77,14 +69,13 @@ function testWeatherPayloadParser() {
   console.log('  ✓ Weather payload parsing passed');
 }
 
-// 4. Test Favorite ID generator and duplicate prevention
 function testFavoriteDuplicates() {
   console.log('  Testing favorites ID and duplicate prevention logic...');
   const getFavoriteId = (lat, lon) => `${lat.toFixed(3)}_${lon.toFixed(3)}`;
 
   const id1 = getFavoriteId(15.5007, 32.5599);
-  const id2 = getFavoriteId(15.5009, 32.5598); // Very close, rounds to same .toFixed(3)
-  const id3 = getFavoriteId(51.5074, -0.1278); // London
+  const id2 = getFavoriteId(15.5009, 32.5598);
+  const id3 = getFavoriteId(51.5074, -0.1278);
 
   assert.strictEqual(id1, '15.501_32.560', 'ID normalized correctly');
   assert.strictEqual(id1, id2, 'Nearby points normalize to identical favorite key');
@@ -92,13 +83,11 @@ function testFavoriteDuplicates() {
   console.log('  ✓ Favorite ID generator and deduplication logic passed');
 }
 
-// 5. Test i18n Dictionary parity
 function testLanguageDictionary() {
   console.log('  Testing i18n translation dictionary parity...');
   const fs = require('fs');
   const i18nCode = fs.readFileSync('js/i18n.js', 'utf8');
 
-  // Verify core translation keys exist for both languages
   const requiredKeys = [
     'appTitle', 'appSubtitle', 'searchHeading', 'searchLabel',
     'searchPlaceholder', 'searchBtn', 'searchingBtn', 'loadingText',
@@ -113,7 +102,6 @@ function testLanguageDictionary() {
   console.log('  ✓ i18n translation parity passed');
 }
 
-// Execute tests
 try {
   testCoordinateValidation();
   testInputSanitization();

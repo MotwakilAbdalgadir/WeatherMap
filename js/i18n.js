@@ -1,9 +1,3 @@
-/**
- * i18n.js - Internationalization Module (English & Arabic)
- * Handles language switching, directionality (LTR/RTL), translation dictionaries,
- * and persistence in localStorage.
- */
-
 const STORAGE_LANG_KEY = 'weathermap_lang';
 
 export const translations = {
@@ -65,39 +59,22 @@ export const translations = {
   },
 };
 
-/**
- * Retrieves the currently active language code ('en' or 'ar').
- * @returns {string} Language code
- */
 export function getCurrentLanguage() {
   const stored = localStorage.getItem(STORAGE_LANG_KEY);
   if (stored === 'ar' || stored === 'en') {
     return stored;
   }
-  return 'ar'; // Default language: Arabic
+  return 'ar';
 }
 
-/**
- * Returns the translated string for a given key.
- * @param {string} key - Translation key
- * @returns {string}
- */
 export function t(key) {
   const lang = getCurrentLanguage();
   if (translations[lang] && typeof translations[lang][key] !== 'undefined') {
     return translations[lang][key];
   }
-  // Fallback to Arabic, then English
   return (translations.ar && translations.ar[key]) || translations.en[key] || key;
 }
 
-/**
- * Sets the active language, updates HTML attributes (lang and dir),
- * updates all DOM elements containing [data-i18n] and [data-i18n-placeholder],
- * and persists the selection in localStorage.
- *
- * @param {'en'|'ar'} lang - Target language
- */
 export function setLanguage(lang) {
   if (lang !== 'en' && lang !== 'ar') {
     lang = 'ar';
@@ -105,12 +82,10 @@ export function setLanguage(lang) {
 
   localStorage.setItem(STORAGE_LANG_KEY, lang);
 
-  // Update HTML document direction and language attribute
   const htmlEl = document.documentElement;
   htmlEl.setAttribute('lang', lang);
   htmlEl.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
 
-  // Translate all text elements with data-i18n
   document.querySelectorAll('[data-i18n]').forEach((el) => {
     const key = el.getAttribute('data-i18n');
     if (key && translations[lang][key]) {
@@ -118,7 +93,6 @@ export function setLanguage(lang) {
     }
   });
 
-  // Translate all input placeholders with data-i18n-placeholder
   document.querySelectorAll('[data-i18n-placeholder]').forEach((el) => {
     const key = el.getAttribute('data-i18n-placeholder');
     if (key && translations[lang][key]) {
@@ -126,17 +100,12 @@ export function setLanguage(lang) {
     }
   });
 
-  // Update language toggle button label
   const toggleBtn = document.getElementById('lang-toggle-btn');
   if (toggleBtn) {
     toggleBtn.textContent = translations[lang].langToggle;
   }
 }
 
-/**
- * Toggles language between 'en' and 'ar'.
- * @returns {string} The newly selected language code.
- */
 export function toggleLanguage() {
   const current = getCurrentLanguage();
   const next = current === 'en' ? 'ar' : 'en';

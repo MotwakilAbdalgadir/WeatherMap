@@ -1,19 +1,10 @@
-/**
- * ui.js - User Interface Updates and Safe DOM Rendering
- * Manages loading indicators, error banners, and builds secure DOM elements.
- */
-
 import { t } from './i18n.js';
 
-// Cache DOM elements
 const searchBtn = document.getElementById('search-btn');
 const loadingIndicator = document.getElementById('loading-indicator');
 const errorBanner = document.getElementById('error-message');
 const errorText = document.getElementById('error-text');
 
-/**
- * Displays the visible loading indicator and disables the search button.
- */
 export function showLoading() {
   if (loadingIndicator) {
     loadingIndicator.classList.remove('hidden');
@@ -25,9 +16,6 @@ export function showLoading() {
   }
 }
 
-/**
- * Hides the loading indicator and re-enables the search button.
- */
 export function hideLoading() {
   if (loadingIndicator) {
     loadingIndicator.classList.add('hidden');
@@ -39,10 +27,6 @@ export function hideLoading() {
   }
 }
 
-/**
- * Renders an accessible user-friendly error message.
- * @param {string} message - Descriptive error text to show to the user.
- */
 export function showError(message) {
   if (errorBanner && errorText) {
     errorText.textContent = message;
@@ -50,9 +34,6 @@ export function showError(message) {
   }
 }
 
-/**
- * Clears and hides any active error banner.
- */
 export function clearError() {
   if (errorBanner && errorText) {
     errorText.textContent = '';
@@ -60,21 +41,10 @@ export function clearError() {
   }
 }
 
-/**
- * Safely builds the Weather Popup DOM element using safe DOM methods
- * (createElement, textContent) to prevent XSS injection from external API strings.
- *
- * @param {Object} weather - Structured weather data.
- * @param {Function} onShareClick - Callback when Share button is clicked.
- * @param {Function} onFavoriteClick - Callback when Favorite button is clicked.
- * @param {boolean} isFavorite - Whether the location is currently favorited.
- * @returns {HTMLElement} The constructed popup DOM card.
- */
 export function buildWeatherPopupElement(weather, onShareClick, onFavoriteClick, isFavorite = false) {
   const card = document.createElement('div');
   card.className = 'weather-popup-card';
 
-  // --- Header ---
   const header = document.createElement('div');
   header.className = 'popup-header';
 
@@ -90,7 +60,6 @@ export function buildWeatherPopupElement(weather, onShareClick, onFavoriteClick,
   header.appendChild(conditionBadge);
   card.appendChild(header);
 
-  // --- Temperature & Icon Row ---
   const tempRow = document.createElement('div');
   tempRow.className = 'popup-temp-row';
 
@@ -109,7 +78,6 @@ export function buildWeatherPopupElement(weather, onShareClick, onFavoriteClick,
   tempRow.appendChild(iconImg);
   card.appendChild(tempRow);
 
-  // --- Details Grid (Humidity, Wind, Clouds) ---
   const detailsGrid = document.createElement('div');
   detailsGrid.className = 'popup-details-grid';
 
@@ -138,11 +106,9 @@ export function buildWeatherPopupElement(weather, onShareClick, onFavoriteClick,
   });
   card.appendChild(detailsGrid);
 
-  // --- Action Buttons (Share & Favorite) ---
   const actionsRow = document.createElement('div');
   actionsRow.className = 'popup-actions-row';
 
-  // Share button
   const shareBtn = document.createElement('button');
   shareBtn.type = 'button';
   shareBtn.className = 'popup-btn popup-btn-share';
@@ -151,7 +117,6 @@ export function buildWeatherPopupElement(weather, onShareClick, onFavoriteClick,
     shareBtn.addEventListener('click', () => onShareClick(weather));
   }
 
-  // Favorite button
   const favBtn = document.createElement('button');
   favBtn.type = 'button';
   favBtn.className = `popup-btn popup-btn-fav ${isFavorite ? 'active' : ''}`;

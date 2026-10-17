@@ -1,17 +1,7 @@
-/**
- * favorites.js - Favorite Locations Management
- * Persists favorite cities in localStorage with duplicate prevention,
- * graceful JSON error recovery, and safe DOM rendering.
- */
-
 import { t } from './i18n.js';
 
 const STORAGE_KEY = 'weathermap_favorites';
 
-/**
- * Loads favorite locations array safely from localStorage.
- * @returns {Array<Object>} List of favorite locations.
- */
 export function getFavorites() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
@@ -23,16 +13,11 @@ export function getFavorites() {
     return [];
   } catch (err) {
     console.error('Failed to parse favorites from localStorage:', err);
-    // Graceful recovery: reset corrupt data
     localStorage.removeItem(STORAGE_KEY);
     return [];
   }
 }
 
-/**
- * Persists favorites array to localStorage.
- * @param {Array<Object>} favoritesList - Array of favorite location objects.
- */
 function persistFavorites(favoritesList) {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(favoritesList));
@@ -41,33 +26,16 @@ function persistFavorites(favoritesList) {
   }
 }
 
-/**
- * Generates a stable unique identifier for a location based on normalized coordinates.
- * @param {number} lat - Latitude
- * @param {number} lon - Longitude
- * @returns {string} ID string
- */
 export function getFavoriteId(lat, lon) {
   return `${lat.toFixed(3)}_${lon.toFixed(3)}`;
 }
 
-/**
- * Checks if a location is already saved in favorites.
- * @param {number} lat - Latitude
- * @param {number} lon - Longitude
- * @returns {boolean}
- */
 export function isFavorite(lat, lon) {
   const id = getFavoriteId(lat, lon);
   const list = getFavorites();
   return list.some(item => getFavoriteId(item.lat, item.lon) === id);
 }
 
-/**
- * Adds a location to favorites, preventing duplicates.
- * @param {Object} location - Location object { name, lat, lon }
- * @returns {boolean} True if added, false if already exists.
- */
 export function addFavorite(location) {
   if (!location || typeof location.lat !== 'number' || typeof location.lon !== 'number') {
     return false;
@@ -77,7 +45,7 @@ export function addFavorite(location) {
   const id = getFavoriteId(location.lat, location.lon);
 
   if (list.some(item => getFavoriteId(item.lat, item.lon) === id)) {
-    return false; // Already saved
+    return false;
   }
 
   const newItem = {
@@ -93,11 +61,6 @@ export function addFavorite(location) {
   return true;
 }
 
-/**
- * Removes a location from favorites by its ID.
- * @param {string} id - The favorite ID
- * @returns {boolean} True if removed.
- */
 export function removeFavorite(id) {
   const list = getFavorites();
   const updated = list.filter(item => item.id !== id);
@@ -108,11 +71,6 @@ export function removeFavorite(id) {
   return false;
 }
 
-/**
- * Toggles a favorite location (adds if not present, removes if present).
- * @param {Object} location - Location object { name, lat, lon }
- * @returns {boolean} New favorite state (true = favorited, false = removed)
- */
 export function toggleFavorite(location) {
   const id = getFavoriteId(location.lat, location.lon);
   if (isFavorite(location.lat, location.lon)) {
@@ -124,12 +82,6 @@ export function toggleFavorite(location) {
   }
 }
 
-/**
- * Safely renders the list of favorites in the UI using DOM methods (no innerHTML).
- *
- * @param {Function} onSelect - Callback when a favorite city is selected to view weather.
- * @param {Function} onRemove - Callback when a favorite city is removed.
- */
 export function renderFavoritesUI(onSelect, onRemove) {
   const listContainer = document.getElementById('favorites-list');
   const emptyState = document.getElementById('favorites-empty');
@@ -143,7 +95,6 @@ export function renderFavoritesUI(onSelect, onRemove) {
     countBadge.textContent = `(${favorites.length})`;
   }
 
-  // Clear existing items safely
   while (listContainer.firstChild) {
     listContainer.removeChild(listContainer.firstChild);
   }
@@ -161,7 +112,6 @@ export function renderFavoritesUI(onSelect, onRemove) {
     const li = document.createElement('li');
     li.className = 'favorite-item';
 
-    // Select Button
     const selectBtn = document.createElement('button');
     selectBtn.type = 'button';
     selectBtn.className = 'favorite-select-btn';
@@ -173,7 +123,6 @@ export function renderFavoritesUI(onSelect, onRemove) {
       }
     });
 
-    // Remove Button
     const removeBtn = document.createElement('button');
     removeBtn.type = 'button';
     removeBtn.className = 'favorite-remove-btn';

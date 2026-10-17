@@ -1,26 +1,9 @@
-/**
- * weather.js - OpenWeatherMap Integration
- * Fetches current meteorological data using coordinates from the OpenWeatherMap Current Weather API.
- */
-
 import { getCurrentLanguage } from './i18n.js';
 
-// ============================================================================
-// CONFIGURATION NOTE:
-// Replace this placeholder with your free OpenWeatherMap API key.
-// Client-side architectural reminder:
-// Any API key embedded directly in browser JavaScript is inherently visible
-// to users via Network DevTools or page source inspection. In production,
-// sensitive keys are protected via a backend proxy/gateway.
-// ============================================================================
 export const OPENWEATHER_API_KEY = '7c3734382baaf153d9e200d500c74220';
 
 const WEATHER_BASE_URL = 'https://api.openweathermap.org/data/2.5/weather';
 
-/**
- * Retrieves the effective API key (from constant, or optional localStorage override for testing).
- * @returns {string} Active API key string.
- */
 export function getApiKey() {
   const customKey = localStorage.getItem('owm_custom_api_key');
   if (customKey && customKey.trim().length > 0) {
@@ -29,17 +12,7 @@ export function getApiKey() {
   return OPENWEATHER_API_KEY;
 }
 
-/**
- * Fetches current weather data for given latitude and longitude coordinates.
- *
- * @param {number} lat - Latitude
- * @param {number} lon - Longitude
- * @param {string} [customName] - Optional resolved location name from geocoding
- * @param {AbortSignal} [signal] - Optional AbortSignal
- * @returns {Promise<Object>} Formatted weather data object
- */
 export async function getWeather(lat, lon, customName, signal) {
-  // Validate coordinates
   if (typeof lat !== 'number' || typeof lon !== 'number' || !Number.isFinite(lat) || !Number.isFinite(lon)) {
     throw new Error('Invalid coordinates provided to weather service.');
   }
@@ -55,8 +28,8 @@ export async function getWeather(lat, lon, customName, signal) {
     lat: lat.toString(),
     lon: lon.toString(),
     appid: apiKey,
-    units: 'metric', // Metric units for Celsius and meters/sec
-    lang: getCurrentLanguage(), // Dynamic 'en' or 'ar' support
+    units: 'metric',
+    lang: getCurrentLanguage(),
   });
 
   const requestUrl = `${WEATHER_BASE_URL}?${queryParams.toString()}`;
@@ -72,7 +45,6 @@ export async function getWeather(lat, lon, customName, signal) {
     throw new Error('Network error: Unable to connect to OpenWeatherMap. Please check your network.');
   }
 
-  // Handle HTTP status codes
   if (!response.ok) {
     if (response.status === 401) {
       throw new Error('Invalid OpenWeatherMap API key (HTTP 401). Please check your API key configuration.');
@@ -86,7 +58,6 @@ export async function getWeather(lat, lon, customName, signal) {
     throw new Error(`Weather service responded with error code HTTP ${response.status}.`);
   }
 
-  // Parse JSON
   let data;
   try {
     data = await response.json();
@@ -95,7 +66,6 @@ export async function getWeather(lat, lon, customName, signal) {
     throw new Error('Failed to parse weather service response.');
   }
 
-  // Validate required payload fields
   if (
     !data.main ||
     typeof data.main.temp === 'undefined' ||

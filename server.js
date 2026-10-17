@@ -1,9 +1,3 @@
-/**
- * server.js - Zero-Dependency Local Development HTTP Server
- * Uses native Node.js built-in modules ('http', 'fs', 'path') to serve the
- * WeatherMap application with proper MIME types for ES Modules.
- */
-
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
@@ -24,11 +18,9 @@ const MIME_TYPES = {
 };
 
 const server = http.createServer((req, res) => {
-  // Normalize and parse request URL
   const parsedUrl = new URL(req.url, `http://localhost:${PORT}`);
   let pathname = parsedUrl.pathname;
 
-  // Default to index.html for root requests
   if (pathname === '/') {
     pathname = '/index.html';
   }
@@ -64,7 +56,6 @@ server.listen(PORT, () => {
   console.log(`   Press Ctrl+C to stop the server.`);
   console.log(`======================================================\n`);
 
-  // Automatically open browser on Windows
   if (process.platform === 'win32') {
     exec(`start ${url}`);
   }
